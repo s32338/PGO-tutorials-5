@@ -1,10 +1,10 @@
 public class StudyProgramme {
-    public String name;
-    public String description;
-    public int numberOfSemesters;
+    private String name;
+    private String description;
+    private int numberOfSemesters;
     private int allowedFailures;
 
-    public StudyProgramme(String name, String description, int numberOfSemesters) {
+    public StudyProgramme(String name, String description, int numberOfSemesters, int allowedFailures) {
         this.name = name;
         this.description = description;
         this.numberOfSemesters = numberOfSemesters;

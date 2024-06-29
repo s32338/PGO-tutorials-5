@@ -1,25 +1,29 @@
 import javax.security.auth.Subject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Student {
     private String firstName;
     private String lastName;
-    private String birthDate;
     private String email;
     private String adress;
+    private String phoneNumber;
+    private Date birthDate;
     private String indexNumber;
     private String status;
     private int currentSemester;
     private StudyProgramme studyProgramme;
     private List<Grade> grades;
 
-    public Student(String firstName, String lastName, String birthDate, String email, String adress) {
+    private int failures = 0;
+
+    public Student(String firstName, String lastName, String email, String adress, String phoneNumber, Date birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthDate = birthDate;
         this.email = email;
         this.adress = adress;
+        this.phoneNumber = phoneNumber;
         this.indexNumber = StudentIndexGen.getNextStudentIndex();
         this.status = "kandydat";
         this.currentSemester = 1;
@@ -36,7 +40,7 @@ public class Student {
     }
 
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
@@ -62,7 +66,12 @@ public class Student {
         return currentSemester;
     }
 
+    public int getFailures() {
+        return failures;
+    }
+
     public StudyProgramme getStudyProgramme() {
+
         return studyProgramme;
     }
 
@@ -72,8 +81,28 @@ public class Student {
     }
 
     public void addGrade(int grade, String subject) {
+        for(Grade g : grades) {
+            if(g.getSubject() == subject && grade > g.getGrade() && grade > 2) {
+                failures--;
+            }
+        }
+        if (grade<3){
+            failures++;
+        }
         grades.add(new Grade(subject, grade));
     }
+
+    public void promoteToNextSemester( ){
+        if (failures < studyProgramme.getAllowedFailures()){
+            if (getCurrentSemester()< getStudyProgramme().getNumberOfSemesters()){
+                currentSemester++;
+            } else if (failures == 0){
+                status = "absolwent";
+            }
+        }
+    }
+
+
 
 
 
